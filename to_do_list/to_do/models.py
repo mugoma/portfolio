@@ -17,6 +17,7 @@ class Task(models.Model):
 
     title = models.CharField(max_length=100)
     description = models.TextField()
+    owner=models.ForeignKey("auth.user", models.CASCADE, null=True)
 
     due_date = models.DateTimeField(verbose_name="Date Due",default=timezone.now)
     added = models.DateTimeField(auto_now_add=True)

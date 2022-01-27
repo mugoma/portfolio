@@ -1,0 +1,16 @@
+{% extends 'to_do/base.html' %}
+{% block title %}{{object.title}}To-Do List - {{request.user.username}}{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <h1>To-Do: {{object.title}}</h1>
+    <div class="row">
+        <div class="col">
+            <h2>Description:</h2>
+            <p>{{object.description}}</p>
+            <h2>Due Date</h2>
+            <p> {{object.due_date}}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

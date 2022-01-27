@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
-from django.views.generic import CreateView, DetailView, ListView
+from django.views.generic import CreateView, DetailView, FormView, ListView
 
 from . import forms, models
 
@@ -16,12 +16,14 @@ class CreateTaskView(LoginRequiredMixin, CreateView):
     login_url = reverse_lazy("to_do:login_redirect")
     redirect_url = reverse_lazy("to_do:list_view")
 
-    fields = "__all__"
+    form_class = forms.TaskForm
 
     def form_valid(self, form):
+        response = super().form_valid(form)
+        self.object.owner = self.request.user
+        self.object.save()
         messages.success(self.request, "Task Added Successfully")
-
-        return super().form_valid(form)
+        return response
 
     def form_invalid(self, form):
         messages.error(
@@ -52,7 +54,9 @@ def create_task_view(request: HttpRequest):
     if request.method == "POST":
         form = forms.TaskForm(request.POST)
         if form.is_valid():
-            form.save()
+            obj = form.save(commit=False)
+            obj.user = request.user
+            obj.save()
             messages.success(request, "Task Added Successfully")
             return HttpResponseRedirect("to_do.list_view")
         else:
@@ -66,8 +70,18 @@ def create_task_view(request: HttpRequest):
 class ListTasksView(LoginRequiredMixin, ListView):
     model = models.Task
     template_name = "to_do/list.html"
+    login_url = reverse_lazy("to_do:login")
+
+    def get_queryset(self):
+        return super().get_queryset().filter(owner__id=self.request.user.id)
 
 
 class DetailTaskView(LoginRequiredMixin, DetailView):
     model = models.Task
     template_name = "to_do/detail.html"
+
+
+class UserCreationView(FormView):
+    form_class = forms.UserCreationForm
+    template_name = "registration/register.html"
+    success_url = reverse_lazy("to_do:login")

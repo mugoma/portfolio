@@ -1,0 +1,55 @@
+{% extends 'to_do/base.html' %}
+{% block title %} Add Task - To-Do List -{{request.user.username}}{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <form method="POST">
+                {% csrf_token %}
+                {{form.non_field_error }}
+
+                <div class="mb-3">
+                    <label for="id_title" class="form-label">Title:</label>
+                    <input type="text" class="form-control" id="id_title" name="title" {% if form.title.value %}
+                        value="{{form.title.value}}" {% endif %}>
+                    {% for error in form.title.errors %}
+                    <li>{{error}}</li>
+                    {% endfor %}
+                </div>
+                <div class="mb-3">
+                    <label for="id_description" class="form-label">Description:</label>
+                    <textarea class="form-control" id="id_description" rows="3"
+                        name="description">{% if form.description.value %}{{form.description.value}}{% endif %}</textarea>
+
+                    {% for error in form.description.errors %}
+                    <li>{{error}}</li>
+                    {% endfor %}
+                </div>
+                <div class="mb-3">
+                    <div class="row">
+                        <div class="col">
+                            <label for="id_due_date_0" class="form-label">Date:</label>
+
+                            <input type="date" class="form-control" id="id_due_date_0" name="due_date_0" >
+                            <!--{% if form.due_date.value %}value="{{form.due_date.value}}" {% endif %}-->
+                        </div>
+                        <div class="col">                    <label for="id_due_date_1" class="form-label">Time:</label>
+                            <input type="time" class="form-control" id="id_due_date_1" name="due_date_1" >
+                        </div>
+                    </div>
+                    <!--input type="time" class="form-control" id="id_due_date_1" name="_due_date_1" value={{form.due_date.value}}-->
+
+                    {% for error in form.due_date.errors %}
+                    <li>{{error}}</li>
+                    {% endfor %}
+                    {{form.hidden_input}}
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+
+            {{form}}
+        </div>
+    </div>
+</div>
+{% endblock %}

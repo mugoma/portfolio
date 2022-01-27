@@ -1,0 +1,31 @@
+{% extends 'to_do/base.html' %}
+{% block title %} Login{% endblock title %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <form method="POST">
+                {% csrf_token %}
+                {{form.non_field_error }}
+                {% for input in form %}
+                {% if input.is_hidden %}
+                {{input}}
+                {% else %}
+
+                <div class="mb-3">
+                    <label for="{{input.auto_id}}" class="form-label">{{input.label}}</label>
+                    <input type="{{input.field.widget.input_type }}" class="form-control" id="{{input.auto_id}}" name="{{input.name}}">
+                    {% for error in input.errors %}
+                    <li>{{error}}</li>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% endfor %}
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+
+            <!--{{form}}-->
+        </div>
+    </div>
+</div>
+{% endblock %}
