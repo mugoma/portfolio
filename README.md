@@ -6,4 +6,4 @@ My main programming framework is Django, therefore most of these projects will u
 The following are the list of projects in this repository
 
 1. [To-do List](https://github.com/mugoma/portfolio/tree/main/to_do_list)
-2. [Alt Cryptocurrency](https://github.com/mugoma/portfolio/tree/main/alt%20cryptocurrency)
+2. [Alt Cryptocurrency](https://github.com/mugoma/portfolio/tree/main/alt_cryptocurrency)
